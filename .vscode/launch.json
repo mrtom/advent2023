@@ -19,7 +19,7 @@
       "name": "Debug",
       "type": "node-terminal",
       "request": "launch",
-      "command": "yarn run start 3"
+      "command": "yarn run start 4"
     }
   ]
 }
