@@ -8,7 +8,6 @@ import {
 import { config } from 'dotenv';
 import { dirname } from 'path';
 import caller from 'caller';
-import { aocFetch } from './fetch';
 config();
 
 type SolveArgs<T, TResult1, TResult2> = {
@@ -82,7 +81,10 @@ export async function solve<
     solutionsFile[`part${part}`].correctSolution = answer;
   }
 
-  writeFileSync(`${dir}/solutions.json`, JSON.stringify(solutionsFile));
+  writeFileSync(
+    `${dir}/solutions.json`,
+    JSON.stringify(solutionsFile, null, 2),
+  );
 }
 
 async function checkAnswer(
@@ -109,7 +111,9 @@ async function checkAnswer(
   );
   const body = await result.text();
   if (body.includes('not the right answer')) {
-    console.log(`Wrong answer\n${body}`);
+    console.log(
+      `Wrong answer\n${body.match(/<article><p>(.*)<\/p><\/article>/)[1]}`,
+    );
     return false;
   }
   console.log('Correct answer!');

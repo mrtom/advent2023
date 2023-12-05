@@ -1,17 +1,22 @@
-export function parseLines(
-  opts: { separator: string } = { separator: '\n' },
-): (input: string) => string[] {
-  const { separator } = opts;
-  return (input) => input.split(separator);
-}
-
+type MapFn<T> = (x: string, index: number, array: string[]) => T;
+type LineParserOptions<T> = {
+  separator?: string;
+  mapFn?: MapFn<T>;
+};
 type GridParserOptions<T> = {
   separator?: string;
   rowSeparator?: string;
-  mapFn?: (x: string) => T;
+  mapFn?: MapFn<T>;
 };
 
-export function getGridParser<T>(opts?: GridParserOptions<T>) {
+export function parseLines<T = string>(
+  opts?: LineParserOptions<T>,
+): (input: string) => T[] {
+  const { separator = '\n', mapFn = (x) => x as unknown as T } = opts ?? {};
+  return (input) => input.split(separator).map(mapFn);
+}
+
+export function getGridParser<T = string>(opts?: GridParserOptions<T>) {
   const {
     separator = '\n',
     rowSeparator = '',
